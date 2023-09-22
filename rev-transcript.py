@@ -50,6 +50,28 @@ def splitparagraph(text: str) -> list:
     return nltk.tokenize.sent_tokenize(text)
 
 
+def sectosrttime(td: timedelta) -> str:
+    """
+    Take a <class 'datetime.timedelta'> and convert it to SRT-formatted time
+    marker (e.g., "0:13:39,870").
+
+    Args:
+        td: class 'datetime.timedelta'
+
+    Returns:
+        String formatted for SRT time marker.
+
+    """
+    tdstr = str(td)
+    if '.' not in tdstr:
+        # Timedelta does not have microsecond precision
+        srtmarker = tdstr + ',000'
+    else:
+        srtmarker = tdstr[0:-3].replace('.', ',')
+
+    return srtmarker
+
+
 if __name__ == '__main__':
     if (len(sys.argv) != 2):
         sys.stderr.write(f'Usage: {os.path.basename(sys.argv[0])} [Frost JSON file]\n')
@@ -86,6 +108,7 @@ if __name__ == '__main__':
                     partials = splitsentence(psentence)
 
                 for partial in partials:
+
                     wordcount = len(partial.split(' '))
                     start = ptimestamps[captionindex]['s']
                     end = ptimestamps[captionindex+(wordcount-1)]['e']
@@ -95,11 +118,11 @@ if __name__ == '__main__':
                         # that the previous partial ended after the start of
                         # the next. Use the previous end marker as the start
                         # instead.
-                        starttimefmt = str(lastendtime)[0:-3].replace('.', ',')
+                        starttimefmt = sectosrttime(lastendtime)
                     else:
-                        starttimefmt = str(timedelta(seconds=start))[0:-3].replace('.', ',')
+                        starttimefmt = sectosrttime(timedelta(seconds=start))
 
-                    endtimefmt = str(timedelta(seconds=end))[0:-3].replace('.', ',')
+                    endtimefmt = sectosrttime(timedelta(seconds=end))
 
                     # Record the end time for this partial for comparison to
                     # the next start time.
