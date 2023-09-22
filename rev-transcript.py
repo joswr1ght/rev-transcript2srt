@@ -4,10 +4,9 @@ import os
 import json
 import nltk
 from datetime import timedelta
-import pdb
 
 
-def splitsentence(s: str, maxlen: int = 50) -> list:
+def splitsentence(s: str, maxlen: int = 60) -> list:
     """
     Take a sentence
 
@@ -48,7 +47,8 @@ if __name__ == '__main__':
 
 with open(sys.argv[1]) as f:
     frost = json.loads(f.read())
-    fcontent = frost['content'][0]['content']
+    frostappliedpmdoc = json.loads(frost['frostTranscript']['appliedPmDocJson'])
+    fcontent = frostappliedpmdoc['content'][0]['content']
 
     linecount = 1
     for para in fcontent:
