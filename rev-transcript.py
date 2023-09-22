@@ -8,7 +8,8 @@ from datetime import timedelta
 
 def splitsentence(s: str, maxlen: int = 60) -> list:
     """
-    Take a sentence
+    Take a sentence and split it into multiple chunks of words, not exceeding maxlen.
+    Splits on whitespace.
 
     Args:
         s: Sentence as a string
@@ -37,6 +38,15 @@ def splitsentence(s: str, maxlen: int = 60) -> list:
 
 # Take input text and return a list of sentences. Does not strip newlines.
 def splitparagraph(text: str) -> list:
+    """
+    Split a paragraph into multiple sentences. Does not strip newlines.
+
+    Args:
+        text: Paragraph text.
+
+    Returns:
+        List of sentences.
+    """
     return nltk.tokenize.sent_tokenize(text)
 
 
