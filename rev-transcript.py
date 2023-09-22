@@ -113,15 +113,22 @@ if __name__ == '__main__':
                     start = ptimestamps[captionindex]['s']
                     end = ptimestamps[captionindex+(wordcount-1)]['e']
 
-                    if (lastendtime > timedelta(seconds=start)):
-                        # The transcript has a bad timing marker, indicating
-                        # that the previous partial ended after the start of
-                        # the next. Use the previous end marker as the start
-                        # instead.
-                        starttimefmt = sectosrttime(lastendtime)
-                    else:
-                        starttimefmt = sectosrttime(timedelta(seconds=start))
+                    # Instead of tracking start and stop timestamps, just use
+                    # the last end timestamp as the start of the next
+                    # timestamp. This will place a caption on every part of the
+                    # video, but the results are more accurate with fewer
+                    # problems. YMMV.
 
+                    # if (lastendtime > timedelta(seconds=start)):
+                    #     # The transcript has a bad timing marker, indicating
+                    #     # that the previous partial ended after the start of
+                    #     # the next. Use the previous end marker as the start
+                    #     # instead.
+                    #     starttimefmt = sectosrttime(lastendtime)
+                    # else:
+                    #     starttimefmt = sectosrttime(timedelta(seconds=start))
+
+                    starttimefmt = sectosrttime(lastendtime)
                     endtimefmt = sectosrttime(timedelta(seconds=end))
 
                     # Record the end time for this partial for comparison to
