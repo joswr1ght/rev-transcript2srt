@@ -89,8 +89,20 @@ if __name__ == '__main__':
 
         linecount = 1
         for para in fcontent:
-            ptranscript = para['content'][0]['text']
-            ptimestamps = para['attrs']['timestamps']
+
+            try:
+                ptranscript = para['content'][0]['text']
+                ptimestamps = para['attrs']['timestamps']
+            except KeyError:
+                # Some Rev transcript JSON files don't include the whole text
+                # in element 0; reproduce if missing by walking list
+                ptranscript = ''
+                ptimestamps = []
+                # para['content'][0]['content'][0]['text']
+                for p in para['content']:
+                    ptranscript += p['content'][0]['text']
+                    ptimestamps.append(p['attrs'])
+
             captionindex = 0  # Index for word and timing marker lists
 
             # Split the paragraph transcript content into sentences.
