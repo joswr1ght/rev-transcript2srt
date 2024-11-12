@@ -122,8 +122,18 @@ if __name__ == '__main__':
                 for partial in partials:
 
                     wordcount = len(partial.split(' '))
-                    start = ptimestamps[captionindex]['s']
-                    end = ptimestamps[captionindex+(wordcount-1)]['e']
+
+                    # Rarely there will be no ending or start timestamp in the Rev
+                    # JSON data. Use the last timestamp here instead, plus or minus
+                    # a second, for subsequent manual review and correction.
+                    try:
+                        start = ptimestamps[captionindex]['s']
+                    except IndexError:
+                        ptimestamps[0]['s']+1
+                    try:
+                        end = ptimestamps[captionindex+(wordcount-1)]['e']
+                    except IndexError:
+                        ptimestamps[-1]['e']+1
 
                     # Instead of tracking start and stop timestamps, just use
                     # the last end timestamp as the start of the next
